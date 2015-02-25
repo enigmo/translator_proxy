@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = TranslatorProxy::VERSION
   spec.authors       = ["'Taku Okawa'"]
   spec.email         = ["'taku.okawa@gmail.com'"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{ruby client for 3rd party translation API}
+  spec.description   = %q{provid easy access to google translate/microsoft translator}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -19,6 +19,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'oauth2'
+  spec.add_dependency 'sinatra'
+  spec.add_dependency 'sinatra-contrib'
+
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "pry"

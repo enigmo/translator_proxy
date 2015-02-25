@@ -1,4 +1,5 @@
 require 'oauth2'
+require 'rexml/document'
 
 module TranslatorProxy
   class <<self
@@ -17,7 +18,9 @@ module TranslatorProxy
     self.default_options = {
       :site           => 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13',
       :scope          => 'http://api.microsofttranslator.com',
-      :translator_url => 'http://api.microsofttranslator.com/v2/Ajax.svc/Translate',
+      :translator_url => 'http://api.microsofttranslator.com/v2/HTTP.svc/Translate',
+      # Ajax response comes with BOM and double quotes "\xEF\xBB\xBF\"Japanese\""
+      # :translator_url => 'http://api.microsofttranslator.com/v2/Ajax.svc/Translate',
       :client_id      => nil,
       :client_secret  => nil
     }
@@ -55,7 +58,9 @@ module TranslatorProxy
         return
       end
       params = build_params(text, opts)
-      @token.get(default_options[:translator_url], :params => params)
+      resp = @token.get(default_options[:translator_url], :params => params)
+      doc = REXML::Document.new(resp.body)
+      doc.elements['string'].text
     end
 
     def build_params(text, opts={})
@@ -63,8 +68,8 @@ module TranslatorProxy
       # https://msdn.microsoft.com/en-us/library/ff512406.aspx
       {
         :text => text,
-        :from => opts.fetch(:from, 'ja'),
-        :to   => opts.fetch(:to,   'en')
+        :from => opts[:from] || 'ja',
+        :to   => opts[:to]   || 'en'
       }
     end
 
