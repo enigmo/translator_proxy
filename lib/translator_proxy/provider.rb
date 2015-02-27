@@ -48,15 +48,8 @@ module TranslatorProxy
         'auth_scheme' => 'request_body')
     end
 
-    def ready?
-      !!@token
-    end
-
-    def translate(text, opts={})
-      unless ready?
-        warn 'you need to generate_token before using api'
-        return
-      end
+    def translate(text, opts = {})
+      get_token if !@token || @token.expired?
       params = build_params(text, opts)
       resp = @token.get(default_options[:translator_url], :params => params)
       doc = REXML::Document.new(resp.body)

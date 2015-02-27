@@ -33,9 +33,6 @@ module TranslatorProxy
     end
 
     def translator
-      unless ::TranslatorProxy.provider.ready?
-        ::TranslatorProxy.provider.get_token
-      end
       ::TranslatorProxy
     end
   end
