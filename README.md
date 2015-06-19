@@ -1,4 +1,5 @@
 [![Circle CI](https://circleci.com/gh/enigmo/translator_proxy/tree/master.svg?style=svg)](https://circleci.com/gh/enigmo/translator_proxy/tree/master)
+[![Code Climate](https://codeclimate.com/github/enigmo/translator_proxy/badges/gpa.svg)](https://codeclimate.com/github/enigmo/translator_proxy)
 
 # TranslatorProxy
 
@@ -20,7 +21,35 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Translate on Command-line
+
+```ruby
+require 'translator_proxy'
+
+# get client-id and client-secret from microsoft
+provider_info = {
+    client_id: 'client-id',
+    client_secret: 'client-secret'
+  }
+
+# create translate provider (only Bing now)
+TranslatorProxy.provider = ::TranslatorProxy::BingProvider.new(provider_info)
+
+# translate languages
+options = { from: 'ja', to: 'en' }
+
+# Translate a string text
+text = 'こんにちは'  # Japanese.
+TranslatorProxy.translate(text, options)  # => "Hello"
+
+# Translate string array
+texts = ['おはよう', 'こんにちは']  # Japanese.
+TranslatorProxy.translate_bulk(texts, options)  # => ['Good morning', 'Hello']
+```
+
+### Translate on Server
+
+TODO: Write usage instructions from server here
 
 ## Contributing
 
