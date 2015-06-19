@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/enigmo/translator_proxy/tree/master.svg?style=svg)](https://circleci.com/gh/enigmo/translator_proxy/tree/master)
+
 # TranslatorProxy
 
 TODO: Write a gem description
