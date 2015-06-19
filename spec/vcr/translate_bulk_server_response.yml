@@ -1,0 +1,92 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://datamarket.accesscontrol.windows.net/v2/OAuth2-13
+    body:
+      encoding: UTF-8
+      string: client_id=foobar&client_secret=hogehoge&grant_type=client_credentials&scope=http%3A%2F%2Fapi.microsofttranslator.com
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache, no-store
+      Pragma:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Expires:
+      - "-1"
+      Request-Id:
+      - 8ec00a86-b8d9-444e-a93e-b5f9bf3a0c60
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Date:
+      - Fri, 19 Jun 2015 09:11:46 GMT
+      Content-Length:
+      - '599'
+    body:
+      encoding: UTF-8
+      string: '{"token_type":"http://schemas.xmlsoap.org/ws/2009/11/swt-token-profile-1.0","access_token":"http%3a%2f%2fschemas.xmlsoap.org","expires_in":"600","scope":"http://api.microsofttranslator.com"}'
+    http_version:
+  recorded_at: Fri, 19 Jun 2015 09:11:47 GMT
+- request:
+    method: post
+    uri: http://api.microsofttranslator.com/V2/Http.svc/TranslateArray
+    body:
+      encoding: UTF-8
+      string: "<TranslateArrayRequest><AppId/><From>ja</From><Options><ContentType
+        xmlns='http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2'>text/html</ContentType></Options><Texts><string
+        xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>おはよう</string><string
+        xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>こんにちは</string><string
+        xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>こんばんは</string></Texts><To>en</To></TranslateArrayRequest>"
+    headers:
+      User-Agent:
+      - Faraday v0.9.1
+      Authorization:
+      - Bearer http%3a%2f%2fschemas.xmlsoap.org
+      Content-Type:
+      - application/xml
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Length:
+      - '1383'
+      Content-Type:
+      - application/xml; charset=utf-8
+      X-Ms-Trans-Info:
+      - 3944.V2_Rest.TranslateArray.32ACFBDA
+      Date:
+      - Fri, 19 Jun 2015 09:11:47 GMT
+    body:
+      encoding: UTF-8
+      string: <ArrayOfTranslateArrayResponse xmlns="http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2"
+        xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
+        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>4</a:int></OriginalTextSentenceLengths><TranslatedText>Good
+        morning</TranslatedText><TranslatedTextSentenceLengths xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>12</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
+        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></OriginalTextSentenceLengths><TranslatedText>Hello</TranslatedText><TranslatedTextSentenceLengths
+        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
+        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></OriginalTextSentenceLengths><TranslatedText>Good
+        evening</TranslatedText><TranslatedTextSentenceLengths xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>12</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse></ArrayOfTranslateArrayResponse>
+    http_version:
+  recorded_at: Fri, 19 Jun 2015 09:11:48 GMT
+recorded_with: VCR 2.9.3
