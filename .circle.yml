@@ -1,0 +1,14 @@
+# reference: https://circleci.com/docs/config-sample
+machine:
+  ruby:
+    version: 2.1.4
+
+
+dependencies:
+  cache_directories:
+    - "vendor/bundle"
+
+  pre:
+    - gem install bundler --pre
+  override:
+    - bundle install --path vendor/bundle
