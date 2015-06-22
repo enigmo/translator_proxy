@@ -6,9 +6,17 @@ module TranslatorProxy
   class Server < ::Sinatra::Base
     get '/' do
       #invalid_access unless check_access
-      translated = translator.translate(translate_params[:text], translate_params)
+      translated = translator.translate(params[:text], translate_params)
       json :result => translated
     end
+
+    post '/bulk' do
+      #invalid_access unless check_access
+      translated = translator.translate_bulk(params[:texts], translate_params)
+      json :result => translated
+    end
+
+    private
 
     def check_access
       if settings.require_referrer? && !(request.referrer && request.referrer.match(settings.require_referrer))
@@ -26,7 +34,6 @@ module TranslatorProxy
 
     def translate_params
       {
-        :text => params[:text],
         :from => params[:from],
         :to   => params[:to]
       }
