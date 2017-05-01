@@ -1,6 +1,6 @@
 require 'spec_helper'
 require_relative '../../lib/translator_proxy/server'
-
+require 'pry-byebug'
 
 describe 'Server Service' do
   include Rack::Test::Methods
@@ -10,15 +10,13 @@ describe 'Server Service' do
   end
 
   # NOTE: if you want to test with real ms api service,
-  #       please get client_id and client_secret from ms,
+  #       please get subscription_key from ms,
   #       replace text below and remove VCR.use_cassette methods.
   let(:provider_info) do
     {
-      client_id: 'foobar',
-      client_secret: 'hogehoge'
+      subscription_key: 'foobar',
     }
   end
-
 
   before do
     TranslatorProxy.provider = ::TranslatorProxy::BingProvider.new(provider_info)
