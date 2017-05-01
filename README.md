@@ -26,10 +26,9 @@ Or install it yourself as:
 ```ruby
 require 'translator_proxy'
 
-# get client-id and client-secret from microsoft
+# get subscription key from microsoft
 provider_info = {
-    client_id: 'client-id',
-    client_secret: 'client-secret'
+    subscription_key: '<subscription_key>',
   }
 
 # create translate provider (only Bing now)
