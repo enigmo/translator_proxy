@@ -1,7 +1,7 @@
 # reference: https://circleci.com/docs/config-sample
 machine:
   ruby:
-    version: 2.1.4
+    version: 2.3.1
 
 
 dependencies:
@@ -12,3 +12,4 @@ dependencies:
     - gem install bundler --pre
   override:
     - bundle install --path vendor/bundle
+    - bundle exec rspec

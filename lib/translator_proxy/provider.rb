@@ -1,4 +1,3 @@
-require 'oauth2'
 require 'rexml/document'
 
 module TranslatorProxy
@@ -19,6 +18,9 @@ module TranslatorProxy
       attr_accessor :default_options
     end
 
+    # http://docs.microsofttranslator.com/oauth-token.html
+    ACCESS_TOKEN_URL = 'https://api.cognitive.microsoft.com/sts/v1.0/issueToken'
+
     TRANSLATE_METHOD_URL       = "http://api.microsofttranslator.com/v2/HTTP.svc/Translate"
     TRANSLATE_ARRAY_METHOD_URL = "http://api.microsofttranslator.com/V2/Http.svc/TranslateArray"
 
@@ -26,12 +28,7 @@ module TranslatorProxy
     SCHEMAS_ARRAY      = "http://schemas.microsoft.com/2003/10/Serialization/Arrays"
 
     self.default_options = {
-      :site           => 'https://datamarket.accesscontrol.windows.net/v2/OAuth2-13',
-      :scope          => 'http://api.microsofttranslator.com',
-      # Ajax response comes with BOM and double quotes "\xEF\xBB\xBF\"Japanese\""
-      # :translator_url => 'http://api.microsofttranslator.com/v2/Ajax.svc/Translate',
-      :client_id      => nil,
-      :client_secret  => nil
+      subscription_key: nil
     }
 
     attr_reader :options
@@ -42,46 +39,47 @@ module TranslatorProxy
 
     def initialize(options={})
       @options = options.merge!(
-        :site          => options[:site]          || default_options[:site],
-        :scope         => options[:scope]         || default_options[:scope],
-        :client_id     => options[:client_id]     || default_options[:client_id],
-        :client_secret => options[:client_secret] || default_options[:client_secret]
+        subscription_key: options[:subscription_key] || default_options[:subscription_key]
       )
-      fail 'required parameters :client_id/:client_secret' unless @options.key?(:client_id) || @options.key?(:client_secret)
+      fail 'required parameters :subscription_key' unless @options.key?(:subscription_key)
     end
 
     # Translate Method : https://msdn.microsoft.com/en-us/library/ff512406.aspx
     def translate(text, opts = {})
-      get_token if !@token || @token.expired?
+      headers = build_headers
       params = build_params(text, opts)
-      resp = @token.get(TRANSLATE_METHOD_URL, :params => params)
+      resp = get(TRANSLATE_METHOD_URL, headers: headers, params: params)
 
       doc = REXML::Document.new(resp.body)
       doc.elements['string'].text
     end
 
-    # TranslateArray Method: https://msdn.microsoft.com/ja-jp/library/ff512422.aspx#phpexample
     def translate_bulk(texts, opts = {})
-      get_token if !@token || @token.expired?
+      headers = build_headers
       body = build_body(texts, opts)
-      resp = @token.post(TRANSLATE_ARRAY_METHOD_URL, headers: headers, body: body)
+      resp = post(TRANSLATE_ARRAY_METHOD_URL, headers: headers, body: body)
 
       doc = REXML::Document.new(resp.body)
       doc.root.children.map do |translate_array_response|
-        translate_array_response.elements['TranslatedText'].text
         translate_array_response.elements['TranslatedText'].text
       end
     end
 
     private
 
-    # rubocop:disable AccessorMethodName
-    def get_token
-      @token = client.client_credentials.get_token(
-        {:scope => 'http://api.microsofttranslator.com'},
-        'auth_scheme' => 'request_body')
+    def token
+      unless defined?(@token)
+        uri = URI(ACCESS_TOKEN_URL)
+        req = Net::HTTP::Post.new(uri)
+        req['Ocp-Apim-Subscription-Key'] = options[:subscription_key]
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(req)
+        end
+        fail res.body if res.code != '200'
+        @token = res.body
+      end
+      @token
     end
-    # rubocop:enable AccessorMethodName
 
     def build_params(text, opts={})
       {
@@ -91,9 +89,9 @@ module TranslatorProxy
       }
     end
 
-    def headers
+    def build_headers
       {
-        "Authorization" => "Bearer#{options[:client_secret]}",
+        "Authorization" => "Bearer #{token}",
         'Content-type'=> 'application/xml'
       }
     end
@@ -118,11 +116,24 @@ module TranslatorProxy
       doc.root.to_s
     end
 
-    def client
-      @client ||= ::OAuth2::Client.new(options[:client_id],
-                                       options[:client_secret],
-                                       :site => options[:site],
-                                       :token_url =>  nil)
+    def get(url, headers:, params:)
+      uri = URI(url)
+      uri.query = URI.encode_www_form(params)
+      req = Net::HTTP::Get.new(uri)
+      headers.each do |key, value|
+        req[key] = value
+      end
+      Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
+    end
+
+    def post(url, headers:, body:)
+      uri = URI(url)
+      req = Net::HTTP::Post.new(uri)
+      req.body = body
+      headers.each do |key, value|
+        req[key] = value
+      end
+      Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
     end
   end
 end

@@ -4,12 +4,11 @@ require 'spec_helper'
 describe TranslatorProxy::BingProvider do
 
   # NOTE: if you want to test with real ms api service,
-  #       please get client_id and client_secret from ms,
+  #       please get subscription_key from ms,
   #       replace text below and remove VCR.use_cassette methods.
   let(:provider_info) do
     {
-      client_id: 'foobar',
-      client_secret: 'hogehoge'
+      subscription_key: 'foobar',
     }
   end
 

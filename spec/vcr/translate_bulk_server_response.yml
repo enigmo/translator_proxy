@@ -2,47 +2,53 @@
 http_interactions:
 - request:
     method: post
-    uri: https://datamarket.accesscontrol.windows.net/v2/OAuth2-13
+    uri: https://api.cognitive.microsoft.com/sts/v1.0/issueToken
     body:
       encoding: UTF-8
-      string: client_id=foobar&client_secret=hogehoge&grant_type=client_credentials&scope=http%3A%2F%2Fapi.microsofttranslator.com
+      string: ''
     headers:
-      User-Agent:
-      - Faraday v0.9.1
-      Content-Type:
-      - application/x-www-form-urlencoded
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.cognitive.microsoft.com
+      Ocp-Apim-Subscription-Key:
+      - foobar
   response:
     status:
       code: 200
       message: OK
     headers:
       Cache-Control:
-      - no-cache, no-store
+      - no-cache
       Pragma:
       - no-cache
+      Content-Length:
+      - '708'
       Content-Type:
-      - application/json; charset=utf-8
+      - application/jwt; charset=us-ascii
       Expires:
       - "-1"
-      Request-Id:
-      - 8ec00a86-b8d9-444e-a93e-b5f9bf3a0c60
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Powered-By:
+      - ASP.NET
+      Apim-Request-Id:
+      - 29f86a55-7998-4e07-8e52-2c35ef15fe3e
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
       X-Content-Type-Options:
       - nosniff
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubDomains
       Date:
-      - Fri, 19 Jun 2015 09:11:46 GMT
-      Content-Length:
-      - '599'
+      - Mon, 01 May 2017 04:34:05 GMT
     body:
       encoding: UTF-8
-      string: '{"token_type":"http://schemas.xmlsoap.org/ws/2009/11/swt-token-profile-1.0","access_token":"http%3a%2f%2fschemas.xmlsoap.org","expires_in":"600","scope":"http://api.microsofttranslator.com"}'
-    http_version:
-  recorded_at: Fri, 19 Jun 2015 09:11:47 GMT
+      string: hoge
+    http_version: 
+  recorded_at: Mon, 01 May 2017 04:34:06 GMT
 - request:
     method: post
     uri: http://api.microsofttranslator.com/V2/Http.svc/TranslateArray
@@ -54,16 +60,18 @@ http_interactions:
         xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>こんにちは</string><string
         xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>こんばんは</string></Texts><To>en</To></TranslateArrayRequest>"
     headers:
-      User-Agent:
-      - Faraday v0.9.1
-      Authorization:
-      - Bearer http%3a%2f%2fschemas.xmlsoap.org
-      Content-Type:
-      - application/xml
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
       - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.microsofttranslator.com
+      Authorization:
+      - Bearer hoge
+      Content-Type:
+      - application/xml
   response:
     status:
       code: 200
@@ -74,9 +82,9 @@ http_interactions:
       Content-Type:
       - application/xml; charset=utf-8
       X-Ms-Trans-Info:
-      - 3944.V2_Rest.TranslateArray.32ACFBDA
+      - 1250.V2_Rest.TranslateArray.4CD1D2E2
       Date:
-      - Fri, 19 Jun 2015 09:11:47 GMT
+      - Mon, 01 May 2017 04:34:05 GMT
     body:
       encoding: UTF-8
       string: <ArrayOfTranslateArrayResponse xmlns="http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2"
@@ -87,6 +95,6 @@ http_interactions:
         xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
         xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></OriginalTextSentenceLengths><TranslatedText>Good
         evening</TranslatedText><TranslatedTextSentenceLengths xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>12</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse></ArrayOfTranslateArrayResponse>
-    http_version:
-  recorded_at: Fri, 19 Jun 2015 09:11:48 GMT
+    http_version: 
+  recorded_at: Mon, 01 May 2017 04:34:06 GMT
 recorded_with: VCR 2.9.3
