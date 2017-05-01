@@ -12,4 +12,3 @@ dependencies:
     - gem install bundler --pre
   override:
     - bundle install --path vendor/bundle
-    - bundle exec rspec
