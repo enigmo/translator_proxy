@@ -41,6 +41,7 @@ module TranslatorProxy
       @options = options.merge!(
         subscription_key: options[:subscription_key] || default_options[:subscription_key]
       )
+      @token_expires_at = Time.now
       fail 'required parameters :subscription_key' unless @options.key?(:subscription_key)
     end
 
@@ -68,17 +69,24 @@ module TranslatorProxy
     private
 
     def token
-      unless defined?(@token)
-        uri = URI(ACCESS_TOKEN_URL)
-        req = Net::HTTP::Post.new(uri)
-        req['Ocp-Apim-Subscription-Key'] = options[:subscription_key]
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          http.request(req)
-        end
-        fail res.body if res.code != '200'
-        @token = res.body
-      end
+      request_token if expire_token?
       @token
+    end
+
+    def expire_token?
+      @token_expires_at < Time.now
+    end
+
+    def request_token
+      uri = URI(ACCESS_TOKEN_URL)
+      req = Net::HTTP::Post.new(uri)
+      req['Ocp-Apim-Subscription-Key'] = options[:subscription_key]
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+        http.request(req)
+      end
+      fail res.body if res.code != '200'
+      @token = res.body
+      @token_expires_at = Time.now + (5 * 60) # expire token in 5 minutes
     end
 
     def build_params(text, opts={})
