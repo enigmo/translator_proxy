@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["'Taku Okawa'"]
   spec.email         = ["'taku.okawa@gmail.com'"]
   spec.summary       = %q{ruby client for 3rd party translation API}
-  spec.description   = %q{provid easy access to google translate/microsoft translator}
+  spec.description   = %q{provide easy access to google translate/microsoft translator}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.add_dependency 'google-cloud-translate'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'sinatra-contrib'
 
