@@ -1,18 +1,6 @@
 require 'rexml/document'
 
 module TranslatorProxy
-  class <<self
-    attr_accessor :provider
-
-    def translate(text, opts={})
-      provider.translate(text, opts)
-    end
-
-    def translate_bulk(texts, opts={})
-      provider.translate_bulk(texts, opts)
-    end
-  end
-
   class BingProvider
     class<<self
       attr_accessor :default_options
@@ -145,5 +133,3 @@ module TranslatorProxy
     end
   end
 end
-
-TranslatorProxy.provider = ::TranslatorProxy::BingProvider.new
