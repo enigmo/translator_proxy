@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'google-cloud-translate'
+  spec.add_dependency 'oj'
   spec.add_dependency 'sinatra'
   spec.add_dependency 'sinatra-contrib'
 

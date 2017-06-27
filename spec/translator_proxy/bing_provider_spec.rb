@@ -29,5 +29,4 @@ describe TranslatorProxy::BingProvider do
       end
     end
   end
-
 end

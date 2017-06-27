@@ -1,6 +1,7 @@
 require 'translator_proxy/version'
 require 'translator_proxy/bing_provider'
 require 'translator_proxy/google_provider'
+require 'translator_proxy/baidu_provider'
 
 module TranslatorProxy
   class <<self
