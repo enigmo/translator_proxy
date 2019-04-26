@@ -20,7 +20,7 @@ describe TranslatorProxy::BingProvider do
   end
 
   describe '#translate_bulk' do
-    let(:texts) { %w(おはよう こんにちは こんばんは) }
+    let(:texts) { %w(おはようございます こんにちは こんばんは) }
 
     it 'should return translated texts' do
       VCR.use_cassette 'translate_bulk_response' do

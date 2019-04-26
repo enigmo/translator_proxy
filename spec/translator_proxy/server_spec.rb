@@ -34,7 +34,7 @@ describe 'Server Service' do
   it 'should return a translated text json' do
     url = URI.encode '/bulk'
     params = {
-      texts: %w(おはよう こんにちは こんばんは),
+      texts: %w(おはようございます こんにちは こんばんは),
       from:  'ja',
       to:    'en'
     }
