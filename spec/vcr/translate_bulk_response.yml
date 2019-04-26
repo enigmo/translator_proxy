@@ -27,7 +27,7 @@ http_interactions:
       Pragma:
       - no-cache
       Content-Length:
-      - '708'
+      - '795'
       Content-Type:
       - application/jwt; charset=us-ascii
       Expires:
@@ -37,28 +37,24 @@ http_interactions:
       X-Powered-By:
       - ASP.NET
       Apim-Request-Id:
-      - 2004dc9a-e8b3-4ea4-a0f1-f86300e63e50
+      - 9ed185db-af00-4d2a-b80a-81799b2dbf20
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains; preload
       X-Content-Type-Options:
       - nosniff
       Date:
-      - Mon, 01 May 2017 04:22:52 GMT
+      - Fri, 26 Apr 2019 07:15:48 GMT
     body:
       encoding: UTF-8
-      string: hoge
+      string: eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1cm46bXMuY29nbml0aXZlc2VydmljZXMiLCJleHAiOiIxNTU2MjYzNTQ5IiwicmVnaW9uIjoiZ2xvYmFsIiwic3Vic2NyaXB0aW9uLWlkIjoiNGIzMzljN2JhYmE4NDhmNTlkNTM0ODY5M2QzMjBiNDQiLCJwcm9kdWN0LWlkIjoiVGV4dFRyYW5zbGF0b3IuUzEiLCJjb2duaXRpdmUtc2VydmljZXMtZW5kcG9pbnQiOiJodHRwczovL2FwaS5jb2duaXRpdmUubWljcm9zb2Z0LmNvbS9pbnRlcm5hbC92MS4wLyIsImF6dXJlLXJlc291cmNlLWlkIjoiL3N1YnNjcmlwdGlvbnMvMDE0OWU1NzUtZGZiMC00N2QzLWJhY2MtNmU1MDA1ZjBjMTUwL3Jlc291cmNlR3JvdXBzL2J1eW1hLWdsb2JhbC1ncm91cC9wcm92aWRlcnMvTWljcm9zb2Z0LkNvZ25pdGl2ZVNlcnZpY2VzL2FjY291bnRzL2J1eW1hLWdsb2JhbCIsInNjb3BlIjoiaHR0cHM6Ly9hcGkubWljcm9zb2Z0dHJhbnNsYXRvci5jb20vIiwiYXVkIjoidXJuOm1zLm1pY3Jvc29mdHRyYW5zbGF0b3IifQ.MOkXOrn6CyHswoMsY6CwHbHaVSQn-_IgamtSVQy0Ze0
     http_version: 
-  recorded_at: Mon, 01 May 2017 04:22:53 GMT
+  recorded_at: Fri, 26 Apr 2019 07:15:49 GMT
 - request:
     method: post
-    uri: http://api.microsofttranslator.com/V2/Http.svc/TranslateArray
+    uri: https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=ja&to=en
     body:
       encoding: UTF-8
-      string: "<TranslateArrayRequest><AppId/><From>ja</From><Options><ContentType
-        xmlns='http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2'>text/html</ContentType></Options><Texts><string
-        xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>おはよう</string><string
-        xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>こんにちは</string><string
-        xmlns='http://schemas.microsoft.com/2003/10/Serialization/Arrays'>こんばんは</string></Texts><To>en</To></TranslateArrayRequest>"
+      string: '[{"text":"おはようございます"},{"text":"こんにちは"},{"text":"こんばんは"}]'
     headers:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
@@ -67,34 +63,36 @@ http_interactions:
       User-Agent:
       - Ruby
       Host:
-      - api.microsofttranslator.com
+      - api.cognitive.microsofttranslator.com
       Authorization:
-      - Bearer hoge
+      - Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1cm46bXMuY29nbml0aXZlc2VydmljZXMiLCJleHAiOiIxNTU2MjYzNTQ5IiwicmVnaW9uIjoiZ2xvYmFsIiwic3Vic2NyaXB0aW9uLWlkIjoiNGIzMzljN2JhYmE4NDhmNTlkNTM0ODY5M2QzMjBiNDQiLCJwcm9kdWN0LWlkIjoiVGV4dFRyYW5zbGF0b3IuUzEiLCJjb2duaXRpdmUtc2VydmljZXMtZW5kcG9pbnQiOiJodHRwczovL2FwaS5jb2duaXRpdmUubWljcm9zb2Z0LmNvbS9pbnRlcm5hbC92MS4wLyIsImF6dXJlLXJlc291cmNlLWlkIjoiL3N1YnNjcmlwdGlvbnMvMDE0OWU1NzUtZGZiMC00N2QzLWJhY2MtNmU1MDA1ZjBjMTUwL3Jlc291cmNlR3JvdXBzL2J1eW1hLWdsb2JhbC1ncm91cC9wcm92aWRlcnMvTWljcm9zb2Z0LkNvZ25pdGl2ZVNlcnZpY2VzL2FjY291bnRzL2J1eW1hLWdsb2JhbCIsInNjb3BlIjoiaHR0cHM6Ly9hcGkubWljcm9zb2Z0dHJhbnNsYXRvci5jb20vIiwiYXVkIjoidXJuOm1zLm1pY3Jvc29mdHRyYW5zbGF0b3IifQ.MOkXOrn6CyHswoMsY6CwHbHaVSQn-_IgamtSVQy0Ze0
       Content-Type:
-      - application/xml
+      - application/json
   response:
     status:
       code: 200
       message: OK
     headers:
-      Content-Length:
-      - '1383'
       Content-Type:
-      - application/xml; charset=utf-8
-      X-Ms-Trans-Info:
-      - 1146.V2_Rest.TranslateArray.4CE12424
+      - application/json; charset=utf-8
+      X-Mt-System:
+      - Microsoft
+      X-Requestid:
+      - TRAN.3597.146EADC5
+      Access-Control-Expose-Headers:
+      - X-RequestId
+      X-Content-Type-Options:
+      - nosniff
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
       Date:
-      - Mon, 01 May 2017 04:22:53 GMT
+      - Fri, 26 Apr 2019 07:15:49 GMT
+      Content-Length:
+      - '153'
     body:
       encoding: UTF-8
-      string: <ArrayOfTranslateArrayResponse xmlns="http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2"
-        xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
-        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>4</a:int></OriginalTextSentenceLengths><TranslatedText>Good
-        morning</TranslatedText><TranslatedTextSentenceLengths xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>12</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
-        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></OriginalTextSentenceLengths><TranslatedText>Hello</TranslatedText><TranslatedTextSentenceLengths
-        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse><TranslateArrayResponse><From>ja</From><OriginalTextSentenceLengths
-        xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>5</a:int></OriginalTextSentenceLengths><TranslatedText>Good
-        evening</TranslatedText><TranslatedTextSentenceLengths xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays"><a:int>12</a:int></TranslatedTextSentenceLengths></TranslateArrayResponse></ArrayOfTranslateArrayResponse>
+      string: '[{"translations":[{"text":"Good morning","to":"en"}]},{"translations":[{"text":"Hello","to":"en"}]},{"translations":[{"text":"Good
+        evening","to":"en"}]}]'
     http_version: 
-  recorded_at: Mon, 01 May 2017 04:22:53 GMT
+  recorded_at: Fri, 26 Apr 2019 07:15:49 GMT
 recorded_with: VCR 2.9.3

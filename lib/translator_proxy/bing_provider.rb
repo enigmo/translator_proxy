@@ -1,4 +1,3 @@
-require 'rexml/document'
 
 module TranslatorProxy
   class BingProvider
@@ -9,11 +8,8 @@ module TranslatorProxy
     # http://docs.microsofttranslator.com/oauth-token.html
     ACCESS_TOKEN_URL = 'https://api.cognitive.microsoft.com/sts/v1.0/issueToken'
 
-    TRANSLATE_METHOD_URL       = "http://api.microsofttranslator.com/v2/HTTP.svc/Translate"
-    TRANSLATE_ARRAY_METHOD_URL = "http://api.microsofttranslator.com/V2/Http.svc/TranslateArray"
-
-    SCHEMAS_SERVICE_V2 = "http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2"
-    SCHEMAS_ARRAY      = "http://schemas.microsoft.com/2003/10/Serialization/Arrays"
+    # https://docs.microsoft.com/en-us/azure/cognitive-services/translator/quickstart-ruby-translate
+    TRANSLATE_V3_METHOD_URL = "https://api.cognitive.microsofttranslator.com"
 
     self.default_options = {
       subscription_key: nil
@@ -25,7 +21,7 @@ module TranslatorProxy
       self.class.default_options
     end
 
-    def initialize(options={})
+    def initialize(options = {})
       @options = options.merge!(
         subscription_key: options[:subscription_key] || default_options[:subscription_key]
       )
@@ -34,27 +30,35 @@ module TranslatorProxy
     end
 
     # Translate Method : https://msdn.microsoft.com/en-us/library/ff512406.aspx
-    def translate(text, opts = {})
+    def translate(texts, opts = {})
       headers = build_headers
-      params = build_params(text, opts)
-      resp = get(TRANSLATE_METHOD_URL, headers: headers, params: params)
+      params = build_params(opts)
+      body = build_body(texts)
+      resp = post(TRANSLATE_V3_METHOD_URL, headers: headers, params: params, body: body)
 
-      doc = REXML::Document.new(resp.body)
-      doc.elements['string'].text
+      translated_text(resp)
     end
 
     def translate_bulk(texts, opts = {})
-      headers = build_headers
-      body = build_body(texts, opts)
-      resp = post(TRANSLATE_ARRAY_METHOD_URL, headers: headers, body: body)
-
-      doc = REXML::Document.new(resp.body)
-      doc.root.children.map do |translate_array_response|
-        translate_array_response.elements['TranslatedText'].text
-      end
+      translate(texts, opts)
     end
 
     private
+
+    def translated_text(resp)
+      response = resp.body.force_encoding("utf-8")
+      translated_text = JSON.parse(response)
+      translated = translated_text.dup
+
+      result = translated.map do |trans|
+        trans["translations"].map do |text|
+          text["text"]
+        end
+      end.flatten
+
+      result = result[0] if translated_text.length == 1
+      result
+    end
 
     def token
       request_token if expire_token?
@@ -77,59 +81,42 @@ module TranslatorProxy
       @token_expires_at = Time.now + (5 * 60) # expire token in 5 minutes
     end
 
-    def build_params(text, opts={})
-      {
-        :text => text,
-        :from => opts[:from] || 'ja',
-        :to   => opts[:to]   || 'en'
-      }
+    def build_params(opts = {})
+      # /translate?api-version=3.0&from=ja&to=en
+      from_lang = opts[:from] || 'ja'
+      to_lang = opts[:to] || 'en'
+      "/translate?api-version=3.0&from=#{from_lang}&to=#{to_lang}"
     end
 
     def build_headers
       {
         "Authorization" => "Bearer #{token}",
-        'Content-type'=> 'application/xml'
+        'Content-type'=> 'application/json'
       }
     end
 
-    def build_body(texts, opts={})
-      doc = REXML::Document.new('<TranslateArrayRequest/>')
-
-      root = doc.root
-      root.add_element('AppId')
-      root.add_element('From').add_text(opts[:from] || 'ja')
-
-      options_el = root.add_element('Options')
-      options_el.add_element('ContentType', 'xmlns' => SCHEMAS_SERVICE_V2).add_text('text/html')
-
-      texts_el = root.add_element('Texts')
-      texts.each do |text|
-        texts_el.add_element('string', 'xmlns' => SCHEMAS_ARRAY).add_text(text)
+    def build_body(texts)
+      data = []
+      if texts.is_a?(Array)
+        texts.each do |text|
+          data << {'text': text}
+        end
+      else
+        data << {'text': texts} 
       end
-
-      root.add_element('To').add_text(opts[:to] || 'en')
-
-      doc.root.to_s
+      data.to_json
     end
 
-    def get(url, headers:, params:)
-      uri = URI(url)
-      uri.query = URI.encode_www_form(params)
-      req = Net::HTTP::Get.new(uri)
-      headers.each do |key, value|
-        req[key] = value
-      end
-      Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
-    end
-
-    def post(url, headers:, body:)
-      uri = URI(url)
+    def post(url, headers:, params:, body:)
+      uri = URI(url + params)
       req = Net::HTTP::Post.new(uri)
       req.body = body
       headers.each do |key, value|
         req[key] = value
       end
-      Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(req) }
+      Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+        http.request(req)
+      end
     end
   end
 end
